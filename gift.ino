@@ -288,11 +288,11 @@ void handle_s3(const float tempo) {
 
 char decode(char* buf) {
   int i = 0;
-  for (char* c = buf; i < 32 && *c; c++) {
+  for (char* c = buf; *c; c++) {
     i <<= 1;
     i += *c == '.' ? 1 : 2; 
   }
-  return lang ? jtree[i] : tree[i];
+  return lang ? (i < sizeof(jtree) ? jtree[i] : 0) : (i < sizeof(tree) ? tree[i] : 0);
 }
 
 void handle_te() {
