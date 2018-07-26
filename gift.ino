@@ -1,4 +1,5 @@
 #include <LiquidCrystal.h>
+#include "pitches.h"
 #define rs 12
 #define en 8 
 #define d4 2
@@ -11,25 +12,10 @@
 #define SWITCH 7
 #define LED 13
 
-#define A3 220
-#define B3 247
-#define C4 261
-#define CS4 277
-#define D4 294
-#define E4 330
-#define F4 349
-#define FS4 369.99
-#define G4 392
-#define A4 440
-#define B4 494
-#define C5 523
-#define D5 587
-#define E5 659
-#define F5 698
-
 #define S1 1
 #define S2 2
 #define S3 3
+#define GA 4
 #define TE 0
 #define ENG 0
 #define JAP 1
@@ -41,7 +27,8 @@ int sv;
 float tv;
 int lang = ENG;
 const char* tit[] = {"WELCOME         ", "\xD6\xB3\xBA\xBF              "};
-
+const char* w[] = {"WIN             ", "\xB6\xC1              "};
+const char* l[] = {"LOSE            ", "\xCF\xB9              "};
 const char tree[] = {0, 'E', 'T', 'I', 'A', 'N', 'M',
                      'S', 'U', 'R', 'W', 'D', 'K', 'G', 'O',
                      'H', 'V', 'F', 0, 'L', 0, 'P', 'J',
@@ -53,43 +40,43 @@ const char jtree[] = {'\x00', '\xCD', '\xD1', '\xDE', '\xB2', '\xC0', '\xD6', '\
                       '\xDD', '\xC3', '\x00', '\xB0', '\xBE', '\x00', '\x00', '\xD2', '\xD3', '\xD5',
                       '\xB7', '\xBB', '\xD9', '\xA4', '\x00', '\xCB', '\xBC', '\xB1', '\x00', '\xBD', '\x00', '\x00'};
                      
-const int PROGMEM song[] = {G4, B4, D5, D5,
-                            E5, D5,
-                            B4, G4, D5, D5, D5,
-                            B4, G4,
-                            D4, D4, D4, D4, D4, D4,
-                            G4, 0, D4,
-                            G4, G4,
-                            G4, G4, D4, E4, F4,
-                            G4, G4,
-                            0, B4, G4, A4, B4,
-                            D5, D5,
-                            B4, B4, G4, B4,
-                            D5, B4, A4,
-                            A4,
-                            E5, D5,
-                            A4, B4,
-                            D5, B4, 0, D5,
-                            B4, A4, B4, G4,
-                            B4, 0,
-                            D4, E4, G4, G4,
-                            B4, B4, D5, D5,
-                            A4, A4, A4, E4,
-                            A4, D4,
-                            G4, G4,
-                            B4, B4,
-                            D5,
-                            G4, B4, D5, D5,
-                            E5, D5,
-                            B4, G4, D5, D5, D5,
-                            B4, 0, G4, 0,
-                            D4, G4,
-                            B4, G4, D5, D5, D5,
-                            B4, 0, G4, 0,
-                            D4, G4,
-                            D4, G4,
-                            D4, G4,
-                            G4, 0};
+const int PROGMEM song[] = {NOTE_G4, NOTE_B4, NOTE_D5, NOTE_D5,
+                            NOTE_E5, NOTE_D5,
+                            NOTE_B4, NOTE_G4, NOTE_D5, NOTE_D5, NOTE_D5,
+                            NOTE_B4, NOTE_G4,
+                            NOTE_D4, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_D4,
+                            NOTE_G4, 0, NOTE_D4,
+                            NOTE_G4, NOTE_G4,
+                            NOTE_G4, NOTE_G4, NOTE_D4, NOTE_E4, NOTE_F4,
+                            NOTE_G4, NOTE_G4,
+                            0, NOTE_B4, NOTE_G4, NOTE_A4, NOTE_B4,
+                            NOTE_D5, NOTE_D5,
+                            NOTE_B4, NOTE_B4, NOTE_G4, NOTE_B4,
+                            NOTE_D5, NOTE_B4, NOTE_A4,
+                            NOTE_A4,
+                            NOTE_E5, NOTE_D5,
+                            NOTE_A4, NOTE_B4,
+                            NOTE_D5, NOTE_B4, 0, NOTE_D5,
+                            NOTE_B4, NOTE_A4, NOTE_B4, NOTE_G4,
+                            NOTE_B4, 0,
+                            NOTE_D4, NOTE_E4, NOTE_G4, NOTE_G4,
+                            NOTE_B4, NOTE_B4, NOTE_D5, NOTE_D5,
+                            NOTE_A4, NOTE_A4, NOTE_A4, NOTE_E4,
+                            NOTE_A4, NOTE_D4,
+                            NOTE_G4, NOTE_G4,
+                            NOTE_B4, NOTE_B4,
+                            NOTE_D5,
+                            NOTE_G4, NOTE_B4, NOTE_D5, NOTE_D5,
+                            NOTE_E5, NOTE_D5,
+                            NOTE_B4, NOTE_G4, NOTE_D5, NOTE_D5, NOTE_D5,
+                            NOTE_B4, 0, NOTE_G4, 0,
+                            NOTE_D4, NOTE_G4,
+                            NOTE_B4, NOTE_G4, NOTE_D5, NOTE_D5, NOTE_D5,
+                            NOTE_B4, 0, NOTE_G4, 0,
+                            NOTE_D4, NOTE_G4,
+                            NOTE_D4, NOTE_G4,
+                            NOTE_D4, NOTE_G4,
+                            NOTE_G4, 0};
                             
 const float PROGMEM t[] = {0.75f, 0.25f, 0.5f, 0.5f,
                            1.0f, 1.0f,
@@ -129,20 +116,20 @@ const float PROGMEM t[] = {0.75f, 0.25f, 0.5f, 0.5f,
                            1.0f, 1.0f,
                            1.0f, 1.0f};
                            
-const int PROGMEM song1[] = {G4, E4, F4, G4,
-                             A4, A4, A4,
-                             G4, G4, G4, F4,
-                             E4,
-                             A3, B3, C4, CS4,
-                             D4, A3, E4,
-                             D4,
-                             G4, E4, F4, G4,
-                             A4, A4, A4,
-                             G4, E4, D4,
-                             C4, C4,
-                             D4, A4,
-                             G4, D4, E4,
-                             C4};
+const int PROGMEM song1[] = {NOTE_G5, NOTE_E5, NOTE_F5, NOTE_G5,
+                             NOTE_A5, NOTE_A5, NOTE_A5,
+                             NOTE_G5, NOTE_G5, NOTE_G5, NOTE_F5,
+                             NOTE_E5,
+                             NOTE_A4, NOTE_B4, NOTE_C5, NOTE_CS5,
+                             NOTE_D5, NOTE_A4, NOTE_E5,
+                             NOTE_D5,
+                             NOTE_G4, NOTE_E5, NOTE_F5, NOTE_G5,
+                             NOTE_A5, NOTE_A5, NOTE_A5,
+                             NOTE_G5, NOTE_E5, NOTE_D5,
+                             NOTE_C5, NOTE_C5,
+                             NOTE_D5, NOTE_A5,
+                             NOTE_G5, NOTE_D5, NOTE_E5,
+                             NOTE_C5};
 
 const float PROGMEM t1[] = {1.5f, 0.5f, 0.5f, 0.5f,
                             2.0f, 0.5f, 0.5f,
@@ -159,23 +146,23 @@ const float PROGMEM t1[] = {1.5f, 0.5f, 0.5f, 0.5f,
                             2.0f, 0.5f, 0.5f,
                             6.0f};
                             
-const int PROGMEM song2[] = {C4, C4,
-                             F4, F4, F4, G4,
-                             A4, A4, A4, F4,
-                             G4, F4, F4, G4,
-                             F4, 0, G4,
-                             A4, A4, A4, B4,
-                             C5, C5, C5, C5,
-                             D5, G4, G4, A4,
-                             G4, 0, C5,
-                             D5, D5, B4, C5,
-                             D5, F5, E5, D5,
-                             C5, D5, C5, A4,
-                             C5, A4, G4,
-                             F4, F4, F4, G4,
-                             A4, A4, A4, F4,
-                             G4, G4, G4, F4, E4,
-                             F4, 0};
+const int PROGMEM song2[] = {NOTE_C4, NOTE_C4,
+                             NOTE_F4, NOTE_F4, NOTE_F4, NOTE_G4,
+                             NOTE_A4, NOTE_A4, NOTE_A4, NOTE_F4,
+                             NOTE_G4, NOTE_F4, NOTE_F4, NOTE_G4,
+                             NOTE_F4, 0, NOTE_G4,
+                             NOTE_A4, NOTE_A4, NOTE_A4, NOTE_B4,
+                             NOTE_C5, NOTE_C5, NOTE_C5, NOTE_C5,
+                             NOTE_D5, NOTE_G4, NOTE_G4, NOTE_A4,
+                             NOTE_G4, 0, NOTE_C5,
+                             NOTE_D5, NOTE_D5, NOTE_B4, NOTE_C5,
+                             NOTE_D5, NOTE_F5, NOTE_E5, NOTE_D5,
+                             NOTE_C5, NOTE_D5, NOTE_C5, NOTE_A4,
+                             NOTE_C5, NOTE_A4, NOTE_G4,
+                             NOTE_F4, NOTE_F4, NOTE_F4, NOTE_G4,
+                             NOTE_A4, NOTE_A4, NOTE_A4, NOTE_F4,
+                             NOTE_G4, NOTE_G4, NOTE_G4, NOTE_F4, NOTE_E4,
+                             NOTE_F4, 0};
                              
 const float PROGMEM t2[] = {0.25f, 0.25f,
                             1.0f, 0.5f, 1.0f, 0.5f,
@@ -205,6 +192,7 @@ void setup() {
   //mode = 1;
   lcd.begin(16, 2);
   lcd.print(tit[lang]);
+  randomSeed(analogRead(0));
 }
 
 void handle_s1(const float tempo) {
@@ -286,6 +274,104 @@ void handle_s3(const float tempo) {
   mode = TE;
 }
 
+void handle_ga() {
+  lcd.setCursor(0, 0);
+  lcd.print("                ");
+  lcd.setCursor(0, 1);
+  lcd.print("                ");
+  char up[16];
+  char down[16];
+  byte uq[5];
+  byte dq[5];
+  byte uh, ut, dh, dt;
+  uh = ut = dh = dt = 0;
+  byte win = 0;
+  byte lose = 0;
+  bool pos = 0;
+  lcd.setCursor(pos, 0);
+  lcd.print('>');
+  memset(up, ' ', 15);
+  memset(down, ' ', 15);
+  up[15] = down[15] = 0;
+  memset(uq, 15, 5);
+  memset(dq, 15, 5);
+  unsigned long last_press, last_render, last_gen;
+  last_press = last_render = last_gen = millis();
+  while (!win && !lose) {
+    unsigned long time_now = millis();
+    if (time_now - last_press >= 200) {
+      last_press = time_now;
+      int is_pressed = digitalRead(DASH);
+      if (is_pressed) {
+        lcd.setCursor(0, pos);
+        lcd.print(' ');
+        pos = !pos;
+        lcd.setCursor(0, pos);
+        lcd.print('>');
+      }
+    } else if (time_now - last_render >= 1000) {
+      last_render = time_now;
+      tone(BUZZER, 440, 500.0f);
+      lose = uh != 5 && uq[uh] == 0 && !pos || dh != 5 && dq[dh] == 0 && pos;
+      if (lose) break;
+      if (uh < 5 && !uq[uh]) uh++;
+      if (dh < 5 && !dq[dh]) dh++;
+      win = (uh == 5 && dh == 5);
+      if (win) break;
+                                                                                                                                                                                                                                                 
+      if (uh < 5) for (byte i = uh; i < ut; uq[i++]--);
+      memset(up, ' ', 15);
+      if (uh < 5) for (byte i = uh; i < ut; up[uq[i++]] = '<');
+      lcd.setCursor(1, 0);
+      lcd.print(up);
+      if (dh < 5) for (byte i = dh; i < dt; dq[i++]--);
+      memset(down, ' ', 15);
+      if (dh < 5) for (byte i = dh; i < dt; down[dq[i++]] = '<');
+      lcd.setCursor(1, 1);
+      lcd.print(down);
+      
+      
+      Serial.print("up:   ");
+      Serial.print(uh);
+      Serial.print(',');
+      Serial.print(ut);
+      Serial.print(',');
+      Serial.println(uq[uh]);
+      Serial.print("down: ");
+      Serial.print(dh);
+      Serial.print(',');
+      Serial.print(dt);
+      Serial.print(',');
+      Serial.println(dq[uh]);
+    } else if (time_now - last_gen >= 2000) {
+      last_gen = time_now;
+      if (ut < 5 && dt < 5) {
+        byte p = random(2);
+        if (p) {
+          ut++;
+        } else {
+          dt++;
+        }
+      } else if (ut < 5) {
+        ut++;
+      } else if (dt < 5) {
+        dt++;
+      }
+    }
+    
+    
+  }
+  lcd.setCursor(0, 0);
+  lcd.print(win ? w[lang] : l[lang]);
+  lcd.setCursor(0, 1);
+  lcd.print("                ");
+  while (digitalRead(DASH) == LOW);
+  delay(200);
+  lcd.setCursor(0, 0);
+  lcd.print(tit[lang]);
+  mode = TE;
+}
+
 char decode(char* buf) {
   int i = 0;
   for (char* c = buf; *c; c++) {
@@ -320,13 +406,13 @@ void handle_te() {
       buf[i++] = '.';
       digitalWrite(13, HIGH);
       digitalWrite(LED, HIGH);
-      tone(BUZZER, C4, 100);
+      tone(BUZZER, NOTE_C4, 100);
       delay(200);
       digitalWrite(13, LOW);
     } else if (digitalRead(DASH) == HIGH) {
       cnt = 0;
       buf[i++] = '-';
-      tone(BUZZER, C4, 180); 
+      tone(BUZZER, NOTE_C4, 180); 
       digitalWrite(13, HIGH);
       delay(200);
       digitalWrite(13, LOW);
@@ -361,6 +447,16 @@ void handle_te() {
     curs = 0;
     memset(scr, 0, 16);
   }
+  if (!strcmp(scr, "GAME")) {
+    mode = GA;
+    curs = 0;
+    memset(scr, 0, 16);
+  }
+  if (!strcmp(scr, "\xB9\xDE\xB0\xD1")) {
+    mode = GA;
+    curs = 0;
+    memset(scr, 0, 16);
+  }
 }
 void loop() {
   // put your main code here, to run repeatedly:
@@ -373,6 +469,9 @@ void loop() {
     break;
   case S3:
     handle_s3(135.0f);
+    break;
+  case GA:
+    handle_ga();
     break;
   case TE: 
     lcd.setCursor(0, 1);
